@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const location = useLocation();
+  const redirectPath = location.state?.path || "/";
   const navigate = useNavigate();
   const { login } = useAuth();
   const emailRef = useRef();
@@ -15,7 +17,7 @@ const Login = () => {
     try {
       await login(emailRef.current.value, passwordRef.current.value);
       setLoading(true);
-      navigate("/");
+      navigate(redirectPath, { replace: true });
     } catch {
       setError("Failed login...");
     }

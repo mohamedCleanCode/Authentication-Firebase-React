@@ -5,6 +5,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import UpdateProfile from "./components/UpdateProfile";
+import RequireAuth from "./context/RequireAuth";
 
 function App() {
   return (
@@ -18,7 +19,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/update-profile" element={<UpdateProfile />} />
-          <Route path="/" element={<Dashboard />} />
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <Dashboard />
+              </RequireAuth>
+            }
+          />
         </Routes>
       </div>
     </Container>

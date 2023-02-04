@@ -1,16 +1,42 @@
-import React from "react";
-import { Button, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React, { useRef, useState } from "react";
+import { Alert, Button, Form } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
+  const { resetPassword } = useAuth();
+  const emailRef = useRef();
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const handelSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await resetPassword(emailRef.current.value);
+      setLoading(true);
+      setMessage("Check your inbox!");
+    } catch {
+      setError("Failed to reset password...");
+    }
+    setLoading(false);
+  };
   return (
     <>
-      <Form>
+      <h1 className="text-center ">Reset Password</h1>
+      {error && <Alert variant="danger">{error}</Alert>}
+      {message && <Alert variant="success">{message}</Alert>}
+      <Form onSubmit={handelSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
+          <Form.Control ref={emailRef} type="email" placeholder="Enter email" />
         </Form.Group>
-        <Button variant="primary" type="submit" className="w-100">
+        <Button
+          disabled={loading}
+          variant="primary"
+          type="submit"
+          className="w-100"
+        >
           Reset Password
         </Button>
       </Form>
