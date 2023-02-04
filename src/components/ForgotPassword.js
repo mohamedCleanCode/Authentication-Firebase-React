@@ -16,6 +16,9 @@ const ForgotPassword = () => {
       await resetPassword(emailRef.current.value);
       setLoading(true);
       setMessage("Check your inbox!");
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch {
       setError("Failed to reset password...");
     }
